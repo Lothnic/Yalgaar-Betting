@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         addDefaultOption(matchSelect, "Choose Match");
 
         // Fetch ongoing matches from the backend
-        fetch('/ongoing-matches')
+        fetch('https://your-backend-url.com/ongoing-matches')
             .then(response => response.json())
             .then(data => {
                 console.log('Fetched ongoing matches:', data.matches);  // Log the fetched matches
