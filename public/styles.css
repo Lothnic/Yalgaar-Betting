@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #000000;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+}
+
+h1, h2 {
+    margin: 0.5em 0;
+}
+
+#matches, #bet-section {
+    width: 90%;
+    max-width: 800px;
+    margin: 2em auto;
+    background: white;
+    padding: 1em;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#match-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.match-card {
+    border: 1px solid #ddd;
+    margin: 0.5em;
+    padding: 1em;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    width: 45%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form input, form select, form button {
+    margin: 0.5em 0;
+    padding: 0.5em;
+    font-size: 1em;
+}
+
+form button {
+    background-color: #2d89e5;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#bet-status {
+    margin-top: 1em;
+    font-weight: bold;
+    color: green;
+}
