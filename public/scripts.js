@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const betForm = document.getElementById("bet-form");
     const betStatus = document.getElementById("bet-status");
 
-    // Add default "Choose Match" option
+    // Function to add default "Choose Match" option
     const addDefaultOption = (selectElement, text) => {
         const defaultOption = document.createElement('option');
         defaultOption.value = "";
@@ -14,48 +14,53 @@ document.addEventListener("DOMContentLoaded", () => {
         selectElement.appendChild(defaultOption);
     };
 
+    // Load ongoing matches from the backend
     const loadOngoingMatches = () => {
-        // Clear previous matches
-        matchSelect.innerHTML = '';  
+        matchSelect.innerHTML = '';  // Clear previous matches
         addDefaultOption(matchSelect, "Choose Match");
 
         // Fetch ongoing matches from the backend
-        fetch('https://yalgaar-betting.vercel.app/ongoing-matches')
-            .then(response => response.json())
+        fetch('/ongoing-matches')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 console.log('Fetched ongoing matches:', data.matches);  // Log the fetched matches
                 data.matches.forEach(match => {
                     const option = document.createElement('option');
-                    option.value = match.id;
+                    option.value = match.id;  // Ensure your CSV has an 'id' field
                     option.textContent = `${match.team1} vs ${match.team2} (${match.sport})`;
                     matchSelect.appendChild(option);
                 });
             })
-            .catch(err => console.error('Error fetching ongoing matches:', err));  // Handle fetch errors
+            .catch(err => {
+                console.error('Error fetching ongoing matches:', err);
+                betStatus.textContent = 'Error loading matches.';
+            });
     };
 
-    // Call loadOngoingMatches to load the matches on page load
+    // Fetch matches when the page loads
     loadOngoingMatches();
 
     // Populate teams when a match is selected
     matchSelect.addEventListener('change', () => {
         const selectedMatch = matchSelect.value;
         teamSelect.innerHTML = ''; // Clear previous options
-        addDefaultOption(teamSelect, "Choose Team");
 
-        // Fetch teams and sport for the selected match from backend
+        // Fetch teams for the selected match from backend
         fetch(`/teams/${selectedMatch}`)
             .then(response => response.json())
             .then(data => {
-                console.log('Fetched teams:', data.teams);  // Log fetched teams
                 data.teams.forEach(team => {
                     const option = document.createElement('option');
                     option.value = team;
                     option.textContent = team;
                     teamSelect.appendChild(option);
                 });
-            })
-            .catch(err => console.error('Error fetching teams:', err));  // Handle errors
+            });
     });
 
     // Handle bet submission
@@ -80,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
         .then(data => {
             betStatus.textContent = data.message;
-        })
-        .catch(err => console.error('Error placing bet:', err));  // Handle submission errors
+        });
     });
 });
